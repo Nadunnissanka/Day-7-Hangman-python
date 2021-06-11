@@ -1,31 +1,60 @@
+#Step 4
+
 import random
+import art
+import words
 
-word_list = ["aardvark", "baboon", "camel", "milk", "book"]
+end_of_game = False
+chosen_word = random.choice(words.word_list)
+word_length = len(chosen_word)
 
-random_int_gen = random.randint(0,len(word_list)-1)
-chosen_word = word_list[random_int_gen]
-print(chosen_word)
+lives = 6
 
-#TODO-1: - Create an empty List called display.
-#For each letter in the chosen_word, add a "_" to 'display'.
-#So if the chosen_word was "apple", display should be ["_", "_", "_", "_", "_"] with 5 "_" representing each letter to guess.
+print(art.logo)
+print("\n")
+print("Validation is not 100%. This is made to improve my coding knowledge in python.\nThanks for playing!\n")
+
+#Testing code
+print(f'Pssst, the solution is {chosen_word}.')
+
+#Create blanks
 display = []
-for letter in chosen_word:
-  display.append("_")
-print(display)
+for _ in range(word_length):
+    display += "_"
 
-guess = input("Please enter your guessed letter: ").lower()
+while not end_of_game:
+    guess = input("Guess a letter: ").lower()
 
-#TODO-2: - Loop through each position in the chosen_word;
-#If the letter at that position matches 'guess' then reveal that letter in the display at that position.
-#e.g. If the user guessed "p" and the chosen word was "apple", then display should be ["_", "p", "p", "_", "_"].
+    if guess in display:
+      print("\nYou guessed this letter already!\n")
+      print(f"{' '.join(display)}")
+    else:
+      #Check guessed letter
+      for position in range(word_length):
+          letter = chosen_word[position]
+        # print(f"Current position: {position}\n Current letter: {letter}\n Guessed letter: {guess}")
+          if letter == guess:
+              display[position] = letter
 
-for position in range(len(chosen_word)):
-  letter = chosen_word[position]
-  if letter == guess:
-    display[position] = letter
-  else:
-    display[position] = "_"
-print(display)
-#TODO-3: - Print 'display' and you should see the guessed letter in the correct position and every other letter replace with "_".
-#Hint - Don't worry about getting the user to guess the next letter. We'll tackle that in step 3.
+      #TODO-2: - If guess is not a letter in the chosen_word,
+      #Then reduce 'lives' by 1. 
+      #If lives goes down to 0 then the game should stop and it should print "You lose."
+      if guess not in chosen_word:
+          print(f"\nYou guessed a wrong letter! You entered {guess}\n")
+          lives -= 1
+          if lives == 0:
+              end_of_game = True
+              print("You lose.")
+
+      #Join all the elements in the list and turn it into a String.
+      print(f"{' '.join(display)}")
+
+      #Check if user has got all letters.
+      if "_" not in display:
+          end_of_game = True
+          print("You win.")
+
+      #TODO-3: - print the ASCII art from 'stages' that corresponds to the current number of 'lives' the user has remaining.
+      print(art.stages[lives])
+
+      
